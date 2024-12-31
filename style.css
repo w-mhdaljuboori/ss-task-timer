@@ -3,6 +3,31 @@ body {
     margin: 20px;
 }
 
+.flex {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.flex label {
+    display: block;
+    font-size: 14px;
+    color: #a0a0a0;
+}
+
+input {
+    width: 70px;
+}
+
+input.long-input {
+    width: 250px;
+}
+
+.flex-load {
+    display: flex;
+    align-items: end;
+}
+
 .record-list {
     list-style: none;
     padding: 0;

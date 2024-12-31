@@ -2,12 +2,53 @@
 const API_STORAGE_KEY = 'key-api';
 const USER_STORAGE_KEY = 'user-id';
 
+// Constants
+const listId = 'd5192ca5-b7db-4866-a309-7161739f88d5';
+const sprintId = '67691cd5f8193dc8b9430e98';
+const primaryFieldId = 3416212;
+const statusFieldId = 3416208;
+const activeFieldId = 3429302;
+const ownerFieldId = 3429822;
+const assigneeFieldId = 3416209;
+
+const statusOrder = [
+    '8bf54526-6762-42e8-a326-c62a77894506',
+    'a2830957-96e5-4709-aca0-df06fa3aafc3',
+    '8ed92143-4014-402a-8c9a-c54effa45a39',
+    'c1818389-a77d-468f-92e5-7f47fff6f3b8'
+];
+
+const listInput = document.getElementById('list-id');
+const sprintInput = document.getElementById('sprint-id');
 const apiInput = document.getElementById('api-key');
 const userInput = document.getElementById('user-id');
+const userTypeSelect = document.getElementById('user-type');
 
 loadedRecords = [];
 
+// Function to set the main input values
+function setMainValues() {
+    listInput.value = listId;
+    sprintInput.value = sprintId;
 
+    // load from storage
+    apiInput.value = localStorage.getItem(API_STORAGE_KEY);
+    userInput.value = localStorage.getItem(USER_STORAGE_KEY);
+
+    // select
+    const ownerFieldOption = document.createElement('option');
+    ownerFieldOption.value = ownerFieldId;
+    ownerFieldOption.selected = true;
+    ownerFieldOption.textContent = 'Owner';
+    userTypeSelect.appendChild(ownerFieldOption);
+
+    const assigneeFieldOption = document.createElement('option');
+    assigneeFieldOption.value = assigneeFieldId;
+    assigneeFieldOption.textContent = 'Assignee';
+    userTypeSelect.appendChild(assigneeFieldOption);
+}
+
+// Function to fetch records from the API
 async function fetchRecords() {
     if (!apiInput.value || !userInput.value) {
         return;
@@ -40,86 +81,19 @@ async function fetchRecords() {
     };
 
     const body = {
-        "listId": "b2a42566-eb5c-40bb-15d8-08d601df4183",
+        "listId": listId,
         "filter": [
             {
-                "fieldId": 718556,
-                "operator": 4,
+                "fieldId": 3416105,
+                "operator": 3,
                 "value": [
                     {
-                        "id": "fcfb04c4-d71d-4770-b370-d13bc472bad0",
-                        "label": "Mob",
-                        "order": null,
-                        "color": null,
-                        "isClosed": null
+                        "_id": sprintId,
+                        "label": "No Label"
                     }
                 ],
-                "viewId": 374311,
-                "id": 331678
-            },
-            {
-                "fieldId": 11281,
-                "operator": 12,
-                "value": [
-                    {
-                        "id": "8c36513d-7256-4518-9580-3b984ed84fff",
-                        "label": "Sprint Backlog"
-                    },
-                    {
-                        "id": "19757813-ec9a-4449-8683-0938202504d0",
-                        "label": "On Hold"
-                    },
-                    {
-                        "id": "1534331844077",
-                        "label": "Dev InProg ⚡️"
-                    },
-                    {
-                        "id": "adc67eb2-36a0-4e9b-9f1f-203db14da6f4",
-                        "label": "Ready for CR"
-                    },
-                    {
-                        "id": "03d81fc8-99ce-4249-874a-6a9e49ab95f8",
-                        "label": "CR InProg ⚡️"
-                    },
-                    {
-                        "id": "63474306-7068-4a8a-b4c2-657f69ca4f9f",
-                        "label": "Waiting Dev Testing"
-                    },
-                    {
-                        "id": "855a651a-5cdf-4db8-a8f2-8d553150ee7f",
-                        "label": "Dev Testing InProg ⚡️"
-                    },
-                    {
-                        "id": "345aadf2-f4f4-4b3b-ba6b-f2d284ec30b5",
-                        "label": "Pending"
-                    },
-                    {
-                        "id": "8627a434-b532-4ae4-b56a-a168bcc66446",
-                        "label": "UI/UX Review ⚡️"
-                    },
-                    {
-                        "id": "1534331846355",
-                        "label": "To Test"
-                    },
-                    {
-                        "id": "50809651-e07a-451b-b78f-dae672541529",
-                        "label": "Test InProg ⚡️"
-                    },
-                    {
-                        "id": "f2cd3506-cc9d-456f-92cc-4dc6c0be4f59",
-                        "label": "Post Production Testing"
-                    },
-                    {
-                        "id": "0774e84f-d9ea-46a3-b838-da51a6a23c2a",
-                        "label": "Blocked"
-                    },
-                    {
-                        "id": "eab4d35c-d366-466c-a867-2d39d2c5bb9b",
-                        "label": "Pending Merge"
-                    }
-                ],
-                "viewId": 374311,
-                "id": 331679
+                "viewId": 535375,
+                "id": 341507
             }
         ],
         "filterCollectionOperator": 0,
@@ -127,7 +101,7 @@ async function fetchRecords() {
             {
                 "groupId": 99,
                 "collectionOperator": 0,
-                "fieldId": 11278,
+                "fieldId": userTypeSelect.value,
                 "operator": 12,
                 "value": [
                     {
@@ -138,11 +112,12 @@ async function fetchRecords() {
         ],
         "viewFilterCollectionOperator": 0,
         "linkedItemsLimit": null,
-        "projectedFields": [11276, 11281, 3302869],
+        "projectedFields": [primaryFieldId, statusFieldId, activeFieldId],
         "quickSearch": "",
-        "sorting": "2717827 ASC",
+        "sorting": null,
         "maxResultCount": 200,
-        "skipCount": 0
+        "skipCount": 0,
+        "viewId": 535375
     };
 
     try {
@@ -157,7 +132,13 @@ async function fetchRecords() {
         }
 
         const data = await response.json();
-        loadedRecords = data.result.items;
+        loadedRecords = data.result.items.sort((a, b) => {
+            const statusA = a[statusFieldId.toString()];
+            const statusB = b[statusFieldId.toString()];
+
+            return statusOrder.indexOf(statusA.id) - statusOrder.indexOf(statusB.id);
+        });
+
         renderRecords(); // Assuming `items` contains the list of records
     } catch (error) {
         console.error("Error fetching records:", error);
@@ -177,20 +158,20 @@ function renderRecords() {
 
         // Create icon
         const icon = document.createElement('i');
-        icon.className = `icon ${record['3302869'] ? 'fa-solid fa-stop stop' : 'fa-solid fa-play start'}`;
+        icon.className = `icon ${record[activeFieldId.toString()] ? 'fa-solid fa-stop stop' : 'fa-solid fa-play start'}`;
         icon.onclick = () => toggleRecordState(record._id);
 
         // Create status
         const status = document.createElement('div');
         status.className = 'record-status';
-        status.style.color = record['11281'].color;
-        status.style.border = `1px solid ${record['11281'].color}`;
-        status.textContent = record['11281'].label;
+        status.style.color = record[statusFieldId.toString()].color;
+        status.style.border = `1px solid ${record[statusFieldId.toString()].color}`;
+        status.textContent = record[statusFieldId.toString()].label;
 
         // Create title
         const title = document.createElement('div');
         title.className = 'record-title';
-        title.textContent = record['11276'];
+        title.textContent = record[primaryFieldId.toString()];
 
         // Append icon and title to list item
         listItem.appendChild(icon);
@@ -202,10 +183,11 @@ function renderRecords() {
     });
 }
 
+// Function to change the active state of a record
 async function changeActiveState(recordId, active) {
     const apiKey = apiInput.value;
 
-    const url = `https://api.workiom.com/api/services/app/Data/UpdatePartial?listId=b2a42566-eb5c-40bb-15d8-08d601df4183&id=${recordId}`;
+    const url = `https://api.workiom.com/api/services/app/Data/UpdatePartial?listId=${listId}&id=${recordId}`;
     const headers = {
         "abp.tenantid": "8",
         "accept": "text/plain",
@@ -226,7 +208,7 @@ async function changeActiveState(recordId, active) {
     };
 
     const body = {
-      "3302869": active
+        [activeFieldId.toString()]: active
     };
 
     try {
@@ -247,25 +229,24 @@ async function changeActiveState(recordId, active) {
 
 // Function to toggle the state of a record
 function toggleRecordState(recordId) {
-    const oldActiveRecord = loadedRecords.find(r => r['3302869'] && r._id !== recordId);
+    const oldActiveRecord = loadedRecords.find(r => r[activeFieldId.toString()] && r._id !== recordId);
     if (oldActiveRecord) {
-        oldActiveRecord['3302869'] = false;
+        oldActiveRecord[activeFieldId.toString()] = false;
         changeActiveState(oldActiveRecord._id, false);
     }
 
 
     const record = loadedRecords.find(r => r._id === recordId);
     if (record) {
-        record['3302869'] = !record['3302869'];
-        changeActiveState(record._id, record['3302869']);
+        record[activeFieldId.toString()] = !record[activeFieldId.toString()];
+        changeActiveState(record._id, record[activeFieldId.toString()]);
     }
 
     renderRecords(loadedRecords); // Re-render the list
 }
 
-// load from storage
-apiInput.value = localStorage.getItem(API_STORAGE_KEY);
-userInput.value = localStorage.getItem(USER_STORAGE_KEY);
+// Set main input values
+setMainValues();
 
 // Initial render
 fetchRecords();

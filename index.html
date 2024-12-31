@@ -9,9 +9,39 @@
 </head>
 <body>
   <h1>Record List</h1>
-  <input placeholder="API Key" id="api-key">
-  <input placeholder="User Id" id="user-id">
-  <button onclick="fetchRecords()">Load Record</button>
+  <div class="flex">
+    <div>
+      <label for="list-id">List Id</label>
+      <input class="long-input" placeholder="List Id" id="list-id">
+    </div>
+
+    <div>
+      <label for="sprint-id">Sprint Id</label>
+      <input class="long-input" placeholder="Sprint Id" id="sprint-id">
+    </div>
+  </div>
+  <div class="flex">
+    <div>
+      <label for="user-type">User Type</label>
+      <select placeholder="User Type" id="user-type">
+      </select>
+    </div>
+
+    <div>
+      <label for="api-key">API Id</label>
+      <input class="long-input" placeholder="API Key" id="api-key">
+    </div>
+
+    <div>
+      <label for="user-id">User Id</label>
+      <input placeholder="User Id" id="user-id">
+    </div>
+
+    <div class="flex-load">
+      <button onclick="fetchRecords()">Load Record</button>
+    </div>
+  </div>
+
 
   <ul id="recordList" class="record-list"></ul>
   <script src="app.js"></script>
